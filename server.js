@@ -8,8 +8,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve frontend static files
-app.use(express.static(path.join(__dirname, '../public')));
+// Serve static files directly from the current folder
+app.use(express.static(__dirname));
 
 const DATA_FILE = path.join(__dirname, 'data.json');
 
@@ -40,7 +40,12 @@ app.post('/api/products', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'GadaaMarket Backend is running successfully' });
+  res.json({ status: 'OK', message: 'GadaaMarket Backend is running' });
+});
+
+// Always send index.html for the root route '/'
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 const PORT = process.env.PORT || 10000;
